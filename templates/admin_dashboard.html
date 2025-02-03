@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Tableau de bord Administrateur</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pseudo</th>
+            <th>Étage</th>
+            <th>Année</th>
+            <th>ELO</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.floor }}</td>
+            <td>{{ user.year }}</td>
+            <td>{{ user.elo }}</td>
+            <td>
+                <a href="/reset_password/{{ user.id }}" class="btn btn-warning btn-sm">Réinitialiser Mot de Passe</a>
+                <form action="/delete_user/{{ user.id }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                        Supprimer
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/logout_admin" class="btn btn-secondary mt-3">Déconnexion</a>
+{% endblock %}
