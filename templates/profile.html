@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Profil de {{ user.username }}</h2>
+
+<p>Étage : {{ user.floor }}</p>
+<p>Année : {{ user.year }}</p>
+<p>ELO : {{ user.elo }}</p>
+
+<h3>Historique des matchs</h3>
+{% if match_history %}
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <th>Date</th>
+                <th>Mode</th>
+                <th>Joueurs</th>
+                <th>Résultat</th>
+            </tr>
+            {% for match in match_history %}
+            <tr>
+                <td>{{ match.date }}</td>
+                <td>{{ match.mode }}</td>
+                <td>{{ match.players | join(', ') }}</td>
+                <td>{{ match.result }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% else %}
+    <p>Aucun match joué pour l'instant.</p>
+{% endif %}
+
+
+<!-- 🔥 Ajout d'un bouton pour modifier les infos -->
+<a href="/edit_profile" class="btn btn-warning mt-3">Modifier mes infos</a>
+
+<!-- Bouton pour se déconnecter -->
+<a href="/logout" class="btn btn-danger mt-3">Se Déconnecter</a>
+
+
+{% if mobile %}
+    <p style="text-align: center;">📱 Vous utilisez un smartphone !</p>
+{% endif %}
+
+{% endblock %}

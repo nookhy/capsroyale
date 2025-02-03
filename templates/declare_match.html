@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Déclarer un match</h2>
+
+<form method="POST" onsubmit="return validatePlayers()">
+    <label for="mode">Mode de jeu :</label>
+    <select name="mode" id="mode" onchange="updateFormFields()">
+        <option value="Chill">Chill (1v1)</option>
+        <option value="Capacks">Capacks (1v1)</option>
+        <option value="CD">CD (2v2)</option>
+        <option value="Dayvis">Dayvis (2v2)</option>
+        <option value="Treyvis">Treyvis (3v3)</option>
+    </select>
+
+    <div id="player-fields">
+        <!-- Les champs joueurs seront générés ici par JavaScript -->
+    </div>
+
+    <div id="winner-selection" style="display: block; margin-top: 10px;">
+        <label for="winning_team">Équipe Gagnante :</label>
+        <select name="winning_team" id="winning_team" required>
+            <option value="">-- Sélectionner une équipe --</option>
+            <option value="Team1">Équipe 1</option>
+            <option value="Team2">Équipe 2</option>
+        </select>
+    </div>
+
+    <button type="submit" id="submit-btn" class="btn btn-primary" disabled>Soumettre</button>
+</form>
+
+<script>
+let validPlayers = {};  
+
+function updateFormFields() {
+    console.log("🔥 updateFormFields() a été appelée !");
+    const mode = document.getElementById("mode").value;
+    const container = document.getElementById("player-fields");
+    const winnerSelection = document.getElementById("winner-selection");  // ✅ Sélecteur récupéré
+    container.innerHTML = "";  
+
+    let numPlayers = 2;  
+    if (mode === "CD" || mode === "Dayvis") {
+        numPlayers = 4;
+    } else if (mode === "Treyvis") {
+        numPlayers = 6;
+    }
+
+    console.log("Mode sélectionné :", mode);
+    console.log("Nombre de joueurs requis :", numPlayers);
+    
+
+    validPlayers = {};  
+
+    for (let i = 1; i <= numPlayers; i++) {
+        const team = (i <= numPlayers / 2) ? "Équipe 1" : "Équipe 2";
+
+        const label = document.createElement("label");
+        label.textContent = `Joueur ${i} (${team}) :`;
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = `player${i}`;
+        input.required = true;
+        validPlayers[`player${i}`] = false;
+        input.setAttribute("autocomplete", "off");
+
+        // 🔥 Attacher les événements dynamiquement avec addEventListener()
+        input.addEventListener("keyup", function (event) {
+            searchUsers(event, input, `player${i}-list`);
+        });
+        input.addEventListener("blur", function () {
+            validateUser(input, `player${i}-list`);
+        });
+        
+        input.setAttribute("onchange", "checkDuplicatePlayers()");
+
+        const datalist = document.createElement("datalist");
+        datalist.id = `player${i}-list`;
+
+        input.setAttribute("list", datalist.id);
+        
+        container.appendChild(label);
+        container.appendChild(input);
+        container.appendChild(datalist);
+        container.appendChild(document.createElement("br"));
+        console.log("📌 validPlayers après initialisation :", validPlayers);
+
+        
+    }
+
+    winnerSelection.style.display = "block";  
+    winnerSelection.style.visibility = "visible";
+    winnerSelection.style.height = "auto";
+    winnerSelection.style.opacity = "1";
+    
+
+    checkFormValidity();
+}
+
+// 🔥 Vérifie que chaque joueur est unique
+function checkDuplicatePlayers() {
+    const inputs = document.querySelectorAll("#player-fields input");
+    const values = Array.from(inputs).map(input => input.value);
+    const uniqueValues = new Set(values);
+
+    if (values.length !== uniqueValues.size) {
+        alert("Un joueur ne peut pas être sélectionné plusieurs fois !");
+        inputs.forEach(input => {
+            if (values.filter(v => v === input.value).length > 1) {
+                input.value = "";  // 🔥 Efface les entrées en double
+            }
+        });
+    }
+}
+
+// 🔥 Vérifie les suggestions de joueurs
+function searchUsers(event, inputField, datalistId) {
+    const query = inputField.value;
+    if (query.length < 1) return;
+
+    fetch(`/search_users?q=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            const datalist = document.getElementById(datalistId);
+            datalist.innerHTML = "";  
+
+            data.forEach(user => {
+                const option = document.createElement("option");
+                option.value = user.username;
+                datalist.appendChild(option);
+            });
+        });
+}
+
+// 🔥 Vérifie si tous les joueurs sont valides avant d'activer le bouton "Soumettre"
+function validateUser(inputField, datalistId) {
+    console.log("🔥 validateUser() appelée avec :", inputField.value);
+
+    const datalist = document.getElementById(datalistId);
+    const options = Array.from(datalist.options).map(opt => opt.value);
+
+    if (!options.includes(inputField.value)) {
+        console.log(`❌ Joueur invalide : ${inputField.value}`);
+        inputField.value = "";
+        validPlayers[inputField.name] = false;
+    } else {
+        validPlayers[inputField.name] = true;
+        console.log(`✅ Joueur valide : ${inputField.value}`);
+    }
+
+    checkFormValidity();
+}
+
+// 🔥 Active/désactive le bouton "Soumettre"
+function checkFormValidity() {
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.disabled = !Object.values(validPlayers).every(v => v);
+    console.log("🔥 État de validPlayers :", validPlayers);  // ✅ DEBUG
+}
+
+window.onload = function() {
+    console.log("🚀 Page chargée, exécution de updateFormFields()");
+    updateFormFields();
+};
+</script>
+
+
+{% endblock %}

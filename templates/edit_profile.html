@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Modifier mes informations</h2>
+
+<form method="POST">
+    <label for="username">Nouveau Pseudo :</label>
+    <input type="text" name="username" value="{{ user.username }}">
+
+    <label for="password">Nouveau Mot de Passe :</label>
+    <input type="password" name="password">
+
+    <label for="floor">Nouvel Étage :</label>
+    <select name="floor">
+        <option value="{{ user.floor }}">{{ user.floor }}</option>
+        <option value="V45">V45</option>
+        <option value="U56">U56</option>
+        <option value="V6">V6</option>
+        <option value="T21">T21</option>
+        <option value="C3">C3</option>
+        <option value="T4">T4</option>
+        <option value="X4">X4</option>
+        <option value="X2">X2</option>
+        <option value="X3">X3</option>
+        <option value="T56">T56</option>
+        <option value="V3">V3</option>
+        <option value="T3">T3</option>
+        <option value="X5">X5</option>
+        <option value="Adoma">Adoma</option>
+        <option value="Exté">Exté</option>
+        <option value="Autre">Autre</option>
+    </select>
+
+    <label for="year">Nouvelle Année :</label>
+    <select name="year">
+        <option value="{{ user.year }}">{{ user.year }}</option>
+        <option value="0A">0A</option>
+        <option value="2A">2A</option>
+        <option value="3A">3A</option>
+        <option value="4A">4A</option>
+        <option value="Ancien">Ancien</option>
+    </select>
+
+    <button type="submit" class="btn btn-success mt-3">Enregistrer</button>
+</form>
+{% endblock %}

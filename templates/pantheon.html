@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Panthéon des meilleurs joueurs</h2>
+<ul>
+    {% for player in pantheon %}
+    <li>{{ player.username }} - ELO {{ player.elo }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

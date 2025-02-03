@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Notifications - Matchs à Confirmer</h2>
+{% if matches %}
+    <ul>
+        {% for match_info in matches %}
+        <li>
+            <strong>Match (Mode : {{ match_info.match.mode }})</strong> entre :
+            {% for player in match_info.players %}
+                {{ player.username }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            <br>
+            Joueurs ayant confirmé : 
+            {% set confirmed_players = match_info.match.confirmed_players.split(",") %}
+            {% for player in match_info.players %}
+                {% if player.id|string in confirmed_players %}
+                    ✅ {{ player.username }}
+                {% else %}
+                    ❌ {{ player.username }}
+                {% endif %}
+            {% endfor %}
+            <br>
+            {% if match_info.match.confirmed %}
+                <button class="btn btn-secondary" disabled>Match Confirmé</button>
+            {% elif user.id|string in confirmed_players %}
+                <button class="btn btn-secondary" disabled>Déjà confirmé</button>
+            {% else %}
+                <a href="/confirm_match/{{ match_info.match.id }}" class="btn btn-success">Confirmer</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun match en attente.</p>
+{% endif %}
+{% endblock %}

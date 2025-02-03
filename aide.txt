@@ -1,0 +1,7 @@
+# a copier dans le terminal une fois le compte github recuperé
+
+git clone https://github.com/tonrepo/caps-ranking.git
+cd caps-ranking
+python -m venv venv
+source venv/bin/activate  # (Sous Windows : venv\Scripts\activate)
+pip install -r requirements.txt

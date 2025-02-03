@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Profil de {{ user.username }}</h2>
+
+<p>Étage : {{ user.floor }}</p>
+<p>Année : {{ user.year }}</p>
+<p>ELO : {{ user.elo }}</p>
+
+<h3>Historique des matchs</h3>
+{% if match_history %}
+    <table class="table table-striped">
+        <tr>
+            <th>Date</th>
+            <th>Mode</th>
+            <th>Joueurs</th>
+            <th>Résultat</th>
+        </tr>
+        {% for match in match_history %}
+        <tr>
+            <td>{{ match.date }}</td>
+            <td>{{ match.mode }}</td>
+            <td>{{ match.players | join(', ') }}</td>
+            <td>{{ match.result }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Aucun match joué pour l'instant.</p>
+{% endif %}
+
+<a href="/ranking" class="btn btn-secondary mt-3">Retour au classements</a>
+
+{% endblock %}

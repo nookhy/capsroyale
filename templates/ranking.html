@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Classement des Joueurs</h2>
+<table class="table table-striped ranking-table">
+    <thead>
+        <tr>
+            <th>Rang</th>
+            <th>Pseudo</th>
+            <th>Étage</th>
+            <th>Année</th>
+            <th>Score ELO</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ player.username }}</td>
+            <td>{{ player.floor }}</td>
+            <td>{{ player.year }}</td>
+            <td>{{ player.elo }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

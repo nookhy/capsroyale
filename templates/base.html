@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 📱 Permet l’adaptation mobile -->
+    <title>Caps Ranking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">  <!-- 📌 Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='kro2.png') }}" alt="Caps Royale" class="logo-img">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/profile">Profil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ranking">Classement</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/declare_match">Déclarer un Match</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications">Notifications</a></li>
+                    <div id="search-container">
+                        <!-- Les champs joueurs seront générés ici par JavaScript -->
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="page-title">Caps Royale</h1>
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const searchContainer = document.getElementById("search-container");
+    searchContainer.innerHTML = "";  // 🔥 On s'assure que le conteneur est vide avant d'ajouter les éléments
+
+    const label = document.createElement("label");
+    label.textContent = "Rechercher un joueur :";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = "search-player";
+    input.autocomplete = "off";
+    input.classList.add("form-control");
+    input.setAttribute("onkeyup", "researchUsers(event, this, 'players-list')");
+    input.setAttribute("onblur", "validateSearch(this, 'players-list')");
+
+    const datalist = document.createElement("datalist");
+    datalist.id = "players-list";
+
+    input.setAttribute("list", datalist.id);
+
+    const button = document.createElement("button");
+    button.textContent = "🔍";
+    button.classList.add("btn", "btn-primary", "ms-2");  // 🔥 Style Bootstrap
+    button.onclick = function () {
+        validateAndSearch();
+    };
+
+searchContainer.appendChild(label);
+searchContainer.appendChild(input);
+searchContainer.appendChild(datalist);
+searchContainer.appendChild(button);  // ✅ Ajout du bouton de validation
+    
+
+function researchUsers(event, inputField, datalistId) {
+    const query = inputField.value.trim();
+    if (query.length < 1) return;
+
+    fetch(`/search_users?q=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            const datalist = document.getElementById(datalistId);
+            datalist.innerHTML = "";  // 🔥 Efface les anciennes options
+
+            data.forEach(user => {
+                const option = document.createElement("option");
+                option.value = user.username;
+                option.dataset.id = user.id;  // ✅ Stocke l'ID du joueur
+                datalist.appendChild(option);
+            });
+        });
+}
+
+function validateSearch(inputField, datalistId) {
+    const datalist = document.getElementById(datalistId);
+    const options = Array.from(datalist.options).map(opt => opt.value);
+
+    if (!options.includes(inputField.value)) {
+        inputField.value = "";
+        alert("Veuillez sélectionner un joueur existant !");
+    }
+}
+
+
+
+function validateAndSearch() {
+    const inputField = document.getElementById("search-player");
+    const datalist = document.getElementById("players-list");
+    const options = Array.from(datalist.options);
+
+    // 🔥 Trouver l'ID correspondant au username sélectionné
+    let selectedUser = options.find(opt => opt.value === inputField.value);
+    if (!selectedUser || !selectedUser.dataset.id) {
+        alert("Veuillez sélectionner un joueur existant !");
+        return;
+    }
+
+    const userId = selectedUser.dataset.id;  // 🔥 Récupération de l'ID
+    window.location.href = `/profile/${userId}`;
+}
+    </script>
+
+    </script>
+    <footer class="footer">
+        <p>Projet développé par : <strong>Ñokhy - V45</strong> et l'équipe Caps Royale 🍻</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,110 @@
+/* 📌 Ajustement général pour mobile */
+body {
+    font-size: 16px;
+    padding-bottom: 80px;  /* Espace sous la page */
+}
+
+/* 📌 Centrer le contenu */
+.container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+/* 📌 Ajuster les tableaux pour mobile */
+.table-responsive {
+    overflow-x: auto; /* Permet de scroller horizontalement sur mobile */
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #222;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+#search-results {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    z-index: 1000;
+}
+
+#search-results li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background: #f0f0f0;
+}
+
+.logo-img {
+    height: 50px;  /* 🔥 Ajuste la taille de l'image */
+    width: auto;  /* 🔥 Garde les proportions */
+}
+
+.page-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #649d46;  /* 🔥 Rouge stylé, change si besoin */
+}
+
+.navbar {
+    background-color: #802518 !important;  /* 🔥 Rouge Kronenbourg */
+}
+
+@media (max-width: 768px) {  /* 📱 Pour les écrans mobiles */
+    h2 {
+        font-size: 20px; /* Réduit la taille des titres */
+        text-align: center;
+    }
+
+    p {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    th, td {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    /* 📌 Adapter la barre de navigation */
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+    }
+
+    /* 📌 Forcer le mode colonne sur mobile */
+    .table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* 📌 Adapter les boutons */
+    .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
