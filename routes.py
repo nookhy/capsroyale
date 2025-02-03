@@ -3,6 +3,7 @@ from models import db, User, Match, Admin
 from elo import update_elo
 from werkzeug.security import generate_password_hash, check_password_hash
 from elo import update_elo
+from sqlalchemy.sql import func
 
 def is_mobile():
     user_agent = request.user_agent.string.lower()
@@ -199,8 +200,30 @@ def init_routes(app):
 
     @app.route("/ranking")
     def ranking():
-        players = User.query.order_by(User.elo.desc()).all()  
-        return render_template("ranking.html", players=players)
+        players = User.query.order_by(User.elo.desc()).all()  # Classement général
+        
+        # 🔥 Classement des étages par SOMME des ELO
+        ranking_by_total = (
+            db.session.query(User.floor, func.sum(User.elo).label("total_elo"))
+            .group_by(User.floor)
+            .order_by(func.sum(User.elo).desc())
+            .all()
+        )
+
+        # 🔥 Classement des étages par MOYENNE des ELO
+        ranking_by_average = (
+            db.session.query(User.floor, func.avg(User.elo).label("avg_elo"))
+            .group_by(User.floor)
+            .order_by(func.avg(User.elo).desc())
+            .all()
+        )
+
+        return render_template(
+            "ranking.html",
+            players=players,
+            ranking_by_total=ranking_by_total,
+            ranking_by_average=ranking_by_average
+        )
 
 
 
