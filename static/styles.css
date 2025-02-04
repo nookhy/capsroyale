@@ -1,20 +1,22 @@
-/* 📌 Ajustement général pour mobile */
+/* 🔥 Ajustement général */
 body {
     font-size: 16px;
-    padding-bottom: 80px;  /* Espace sous la page */
+    padding-bottom: 80px; /* Espace sous la page */
 }
 
-/* 📌 Centrer le contenu */
+/* 🔥 Centrer et limiter la largeur du contenu sur grand écran */
 .container {
-    max-width: 100%;
+    max-width: 1200px; /* Largeur max sur PC */
+    margin: 0 auto; /* Centre le contenu */
     padding: 15px;
 }
 
-/* 📌 Ajuster les tableaux pour mobile */
+/* 🔥 Ajuster les tableaux pour mobile */
 .table-responsive {
     overflow-x: auto; /* Permet de scroller horizontalement sur mobile */
 }
 
+/* 🔥 Footer */
 .footer {
     text-align: center;
     padding: 10px;
@@ -26,6 +28,7 @@ body {
     font-size: 14px;
 }
 
+/* 🔥 Champ de recherche */
 .search-container {
     position: relative;
     width: 100%;
@@ -53,26 +56,30 @@ body {
     background: #f0f0f0;
 }
 
+/* 🔥 Logo */
 .logo-img {
-    height: 50px;  /* 🔥 Ajuste la taille de l'image */
-    width: auto;  /* 🔥 Garde les proportions */
+    height: 50px;
+    width: auto;
 }
 
+/* 🔥 Titre de la page */
 .page-title {
     text-align: center;
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #649d46;  /* 🔥 Rouge stylé, change si besoin */
+    color: #649d46;
 }
 
+/* 🔥 Navbar */
 .navbar {
-    background-color: #802518 !important;  /* 🔥 Rouge Kronenbourg */
+    background-color: #802518 !important; /* Rouge Kronenbourg */
 }
 
-@media (max-width: 768px) {  /* 📱 Pour les écrans mobiles */
+/* 📱 Version mobile */
+@media (max-width: 768px) {
     h2 {
-        font-size: 20px; /* Réduit la taille des titres */
+        font-size: 20px;
         text-align: center;
     }
 
@@ -86,7 +93,7 @@ body {
         padding: 5px;
     }
 
-    /* 📌 Adapter la barre de navigation */
+    /* 🔥 Adapter la barre de navigation */
     .navbar-brand {
         font-size: 18px;
     }
@@ -95,16 +102,42 @@ body {
         font-size: 14px;
     }
 
-    /* 📌 Forcer le mode colonne sur mobile */
+    /* 🔥 Mode colonne sur mobile */
     .table {
         display: block;
         width: 100%;
         overflow-x: auto;
     }
 
-    /* 📌 Adapter les boutons */
+    /* 🔥 Adapter les boutons */
     .btn {
         width: 100%;
         margin-top: 10px;
+    }
+
+    /* 🔥 Footer collé en bas */
+    .footer {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+/* 💻 Version ordinateur */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+    }
+
+    .page-title {
+        font-size: 42px;
+    }
+
+    .btn {
+        width: auto;
+    }
+
+    /* 🔥 Agrandir les tableaux sur PC */
+    .table {
+        width: 100%;
     }
 }
