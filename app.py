@@ -1,6 +1,7 @@
 from flask import Flask
 from models import db  # ✅ Importer db ici
 from routes import init_routes
+import os
 
 app = Flask(__name__)
 app.config.from_object("config")
