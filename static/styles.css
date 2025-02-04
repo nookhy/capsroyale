@@ -1,18 +1,17 @@
-/* 📌 Ajustement général pour mobile */
+/* 🔥 Ajustement général */
 body {
     font-size: 16px;
-    padding-bottom: 80px;  /* Espace sous la page */
+    padding-bottom: 80px;
 }
 
-/* 📌 Centrer le contenu */
 .container {
-    max-width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 15px;
 }
 
-/* 📌 Ajuster les tableaux pour mobile */
 .table-responsive {
-    overflow-x: auto; /* Permet de scroller horizontalement sur mobile */
+    overflow-x: auto;
 }
 
 .footer {
@@ -37,7 +36,7 @@ body {
     width: 100%;
     background: white;
     border: 1px solid #ddd;
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     margin: 0;
     display: none;
@@ -54,8 +53,8 @@ body {
 }
 
 .logo-img {
-    height: 50px;  /* 🔥 Ajuste la taille de l'image */
-    width: auto;  /* 🔥 Garde les proportions */
+    height: 50px;
+    width: auto;
 }
 
 .page-title {
@@ -63,16 +62,16 @@ body {
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #649d46;  /* 🔥 Rouge stylé, change si besoin */
+    color: #649d46;
 }
 
 .navbar {
-    background-color: #802518 !important;  /* 🔥 Rouge Kronenbourg */
+    background-color: #802518 !important;
 }
 
-@media (max-width: 768px) {  /* 📱 Pour les écrans mobiles */
+@media (max-width: 768px) {
     h2 {
-        font-size: 20px; /* Réduit la taille des titres */
+        font-size: 20px;
         text-align: center;
     }
 
@@ -86,7 +85,6 @@ body {
         padding: 5px;
     }
 
-    /* 📌 Adapter la barre de navigation */
     .navbar-brand {
         font-size: 18px;
     }
@@ -95,16 +93,74 @@ body {
         font-size: 14px;
     }
 
-    /* 📌 Forcer le mode colonne sur mobile */
     .table {
         display: block;
         width: 100%;
         overflow-x: auto;
     }
 
-    /* 📌 Adapter les boutons */
     .btn {
         width: 100%;
         margin-top: 10px;
     }
+
+    .footer {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    #search-container {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    #search-player {
+        width: 80%;
+    }
+
+    #search-container button {
+        flex-shrink: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+    }
+
+    .page-title {
+        font-size: 42px;
+    }
+
+    .btn {
+        width: auto;
+    }
+
+    .table {
+        width: 100%;
+    }
+}
+
+#search-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 8px;
+}
+
+#search-player {
+    width: 200px;
+}
+
+#search-container button {
+    padding: 5px 10px;
+    background-color: #12a04d !important;
+    border-color: #12a04d !important;
+    color: white !important;
+}
+
+#search-container button:hover {
+    background-color: #0a6d36 !important;
+    border-color: #0a6d36 !important;
 }
