@@ -1,22 +1,19 @@
 /* 🔥 Ajustement général */
 body {
     font-size: 16px;
-    padding-bottom: 80px; /* Espace sous la page */
+    padding-bottom: 80px;
 }
 
-/* 🔥 Centrer et limiter la largeur du contenu sur grand écran */
 .container {
-    max-width: 1200px; /* Largeur max sur PC */
-    margin: 0 auto; /* Centre le contenu */
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 15px;
 }
 
-/* 🔥 Ajuster les tableaux pour mobile */
 .table-responsive {
-    overflow-x: auto; /* Permet de scroller horizontalement sur mobile */
+    overflow-x: auto;
 }
 
-/* 🔥 Footer */
 .footer {
     text-align: center;
     padding: 10px;
@@ -28,7 +25,6 @@ body {
     font-size: 14px;
 }
 
-/* 🔥 Champ de recherche */
 .search-container {
     position: relative;
     width: 100%;
@@ -40,7 +36,7 @@ body {
     width: 100%;
     background: white;
     border: 1px solid #ddd;
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     margin: 0;
     display: none;
@@ -56,13 +52,11 @@ body {
     background: #f0f0f0;
 }
 
-/* 🔥 Logo */
 .logo-img {
     height: 50px;
     width: auto;
 }
 
-/* 🔥 Titre de la page */
 .page-title {
     text-align: center;
     font-size: 36px;
@@ -71,12 +65,10 @@ body {
     color: #649d46;
 }
 
-/* 🔥 Navbar */
 .navbar {
-    background-color: #802518 !important; /* Rouge Kronenbourg */
+    background-color: #802518 !important;
 }
 
-/* 📱 Version mobile */
 @media (max-width: 768px) {
     h2 {
         font-size: 20px;
@@ -93,7 +85,6 @@ body {
         padding: 5px;
     }
 
-    /* 🔥 Adapter la barre de navigation */
     .navbar-brand {
         font-size: 18px;
     }
@@ -102,27 +93,37 @@ body {
         font-size: 14px;
     }
 
-    /* 🔥 Mode colonne sur mobile */
     .table {
         display: block;
         width: 100%;
         overflow-x: auto;
     }
 
-    /* 🔥 Adapter les boutons */
     .btn {
         width: 100%;
         margin-top: 10px;
     }
 
-    /* 🔥 Footer collé en bas */
     .footer {
         font-size: 12px;
         padding: 8px;
     }
+
+    #search-container {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    #search-player {
+        width: 80%;
+    }
+
+    #search-container button {
+        flex-shrink: 0;
+    }
 }
 
-/* 💻 Version ordinateur */
 @media (min-width: 1024px) {
     .container {
         max-width: 1200px;
@@ -136,8 +137,30 @@ body {
         width: auto;
     }
 
-    /* 🔥 Agrandir les tableaux sur PC */
     .table {
         width: 100%;
     }
+}
+
+#search-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 8px;
+}
+
+#search-player {
+    width: 200px;
+}
+
+#search-container button {
+    padding: 5px 10px;
+    background-color: #12a04d !important;
+    border-color: #12a04d !important;
+    color: white !important;
+}
+
+#search-container button:hover {
+    background-color: #0a6d36 !important;
+    border-color: #0a6d36 !important;
 }
