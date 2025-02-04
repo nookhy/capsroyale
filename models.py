@@ -8,7 +8,7 @@ db = SQLAlchemy()
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(500), nullable=False)
     floor = db.Column(db.String(10), nullable=False)
     year = db.Column(db.String(10), nullable=False)
     elo = db.Column(db.Integer, default=400)
@@ -16,7 +16,7 @@ class User(db.Model):
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(200), nullable=False)  # 🔒 Stocke en hash
+    password_hash = db.Column(db.String(500), nullable=False)  # 🔒 Stocke en hash
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)  # 🔒 Hash sécurisé
