@@ -12,3 +12,7 @@ source venv/bin/activate
 pip install flask flask-sqlalchemy flask-wtf werkzeug
 pip install werkzeug
 flask run --host=0.0.0.0 --port=5001    (pour lancer le serv)
+
+
+
+lien du site deployé par Render: https://eclcapsroyale.onrender.com
