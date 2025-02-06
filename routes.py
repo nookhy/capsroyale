@@ -425,6 +425,7 @@ def init_routes(app):
     @app.route("/profile/<int:user_id>")
     def view_profile(user_id):
         user = User.query.get(user_id)
+        tier, icon = get_tier(user.elo)
         if not user:
             flash("Profil introuvable", "danger")
             return redirect("/search_profile")
@@ -463,6 +464,6 @@ def init_routes(app):
                 "result": result
             })
 
-        return render_template("profile_view.html", user=user, match_history=match_history)
+        return render_template("profile_view.html", user=user, match_history=match_history, tier=tier, icon=icon)
         
         
