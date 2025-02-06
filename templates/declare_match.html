@@ -6,11 +6,10 @@
 <form method="POST" onsubmit="return validatePlayers()">
     <label for="mode">Mode de jeu :</label>
     <select name="mode" id="mode" onchange="updateFormFields()">
-        <option value="Chill">Chill (1v1)</option>
         <option value="Capacks">Capacks (1v1)</option>
         <option value="CD">CD (2v2)</option>
-        <option value="Dayvis">Dayvis (2v2)</option>
-        <option value="Treyvis">Treyvis (3v3)</option>
+        <option value="Davis">Davis (2v2)</option>
+        <option value="Trevis">Trevis (3v3)</option>
     </select>
 
     <div id="player-fields">
@@ -40,9 +39,9 @@ function updateFormFields() {
     container.innerHTML = "";  
 
     let numPlayers = 2;  
-    if (mode === "CD" || mode === "Dayvis") {
+    if (mode === "CD" || mode === "Davis") {
         numPlayers = 4;
-    } else if (mode === "Treyvis") {
+    } else if (mode === "Trevis") {
         numPlayers = 6;
     }
 

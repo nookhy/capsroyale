@@ -24,7 +24,6 @@ class Admin(db.Model):
     
 
 
-
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     player1_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

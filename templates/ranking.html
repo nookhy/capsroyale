@@ -27,6 +27,7 @@
                 <th>Étage</th>
                 <th>Année</th>
                 <th>ELO</th>
+                <th>Tier</th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,10 @@
                 <td>{{ player.floor }}</td>
                 <td>{{ player.year }}</td>
                 <td>{{ player.elo }}</td>
+                <td>
+                    <img src="{{ url_for('static', filename='icons/' + player.icon) }}" alt="{{ player.tier }}" width="40">
+                    {{ player.tier }}
+                </td>  <!-- 🔥 Icône et nom du tier -->
             </tr>
             {% endfor %}
         </tbody>

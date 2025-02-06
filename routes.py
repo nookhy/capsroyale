@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, jsonify, flash, url_for
 from models import db, User, Match, Admin
-from elo import update_elo
+from fct import update_elo, get_tier
 from werkzeug.security import generate_password_hash, check_password_hash
-from elo import update_elo
+from fct import update_elo
 from sqlalchemy.sql import func
 
 def is_mobile():
@@ -158,7 +158,7 @@ def init_routes(app):
             return redirect("/login")
 
         user = User.query.get(session["user_id"])
-
+        tier, icon = get_tier(user.elo)
 
         # 🔥 Récupérer les matchs où le joueur a participé
         matches = Match.query.filter(
@@ -195,13 +195,26 @@ def init_routes(app):
                 "result": result
             })
 
-        return render_template("profile.html", user=user, match_history=match_history)
+        return render_template("profile.html", user=user, match_history=match_history, tier=tier, icon=icon)
 
 
     @app.route("/ranking")
     def ranking():
         players = User.query.order_by(User.elo.desc()).all()  # Classement général
         
+        # 🔥 Ajouter les tiers aux joueurs
+        ranked_players = []
+        for player in players:
+            tier, icon = get_tier(player.elo)
+            ranked_players.append({
+                "username": player.username,
+                "floor": player.floor,
+                "year": player.year,
+                "elo": player.elo,
+                "tier": tier,
+                "icon": icon
+            })
+
         # 🔥 Classement des étages par SOMME des ELO
         ranking_by_total = (
             db.session.query(User.floor, func.sum(User.elo).label("total_elo"))
@@ -220,7 +233,7 @@ def init_routes(app):
 
         return render_template(
             "ranking.html",
-            players=players,
+            players=ranked_players,
             ranking_by_total=ranking_by_total,
             ranking_by_average=ranking_by_average
         )
@@ -268,7 +281,7 @@ def init_routes(app):
         match = Match.query.get(match_id)
         if not match:
             return "Match introuvable."
-
+        
         user_id = session.get("user_id")
         if not user_id:
             return redirect("/login")
@@ -313,11 +326,21 @@ def init_routes(app):
                 winners, losers = team2, team1
 
             # 🔥 Mise à jour de l'ELO pour chaque joueur
+            moywin = 0
+            moylose = 0
             for winner in winners:
                 for loser in losers:
                     winner_obj = User.query.get(winner)
                     loser_obj = User.query.get(loser)
-                    winner_obj.elo, loser_obj.elo = update_elo(winner_obj.elo, loser_obj.elo)
+                    moywin += winner_obj.elo / len(winners)
+                    moylose += loser_obj.elo / len(losers)
+            for winner in winners:
+                winner_obj = User.query.get(winner)
+                winner_obj.elo, _ = update_elo(winner_obj.elo, moylose, match.mode)
+            for loser in losers:
+                loser_obj = User.query.get(loser)
+                _, loser_obj = update_elo(moywin, loser_obj.elo, match.mode)
+
 
         db.session.commit()
         return redirect("/notifications")

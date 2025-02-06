@@ -7,7 +7,10 @@
 <p>Année : {{ user.year }}</p>
 <p>ELO : {{ user.elo }}</p>
 
-<h3>Historique des matchs</h3>
+<h3>Tier : {{ tier }}</h3>
+<img src="{{ url_for('static', filename='icons/' + icon) }}" alt="{{ tier }}" width="50">
+
+<h4>Historique des matchs</h4>
 {% if match_history %}
     <div class="table-responsive">
         <table class="table table-bordered">
