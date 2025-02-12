@@ -69,6 +69,12 @@ body {
     background-color: #802518 !important;
 }
 
+.feed-container {
+    max-height: 600px;  /* 🔥 Hauteur max du fil */
+    overflow-y: auto;  /* 🔥 Scroll vertical */
+    padding-right: 10px;
+}
+
 @media (max-width: 768px) {
     h2 {
         font-size: 20px;
@@ -111,16 +117,21 @@ body {
 
     #search-container {
         width: 100%;
+        display: flex;
+        flex-direction: column; /* 🔥 Aligner verticalement */
+        align-items: center; /* 🔥 Centrer horizontalement */
         justify-content: center;
         margin-top: 10px;
     }
 
     #search-player {
-        width: 80%;
+        width: 90%; /* 🔥 Occuper presque toute la largeur */
+        text-align: center;
     }
 
     #search-container button {
-        flex-shrink: 0;
+        width: 50%; /* 🔥 Rendre le bouton plus grand et centré */
+        margin-top: 5px;
     }
 }
 

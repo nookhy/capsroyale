@@ -7,15 +7,11 @@ puis tape flask run --host=0.0.0.0 --port=5001 dans le terminal, tu pourras te c
 Si jamais ca marche pas c'est qu'il te manque des modules (comme flask ou SQLalchemy par exemple)
 Pour gerer Flask, dans le terminal:
 
-python -m venv venv 
-
-source venv/bin/activate 
-
-pip install flask flask-sqlalchemy flask-wtf werkzeug 
-
-pip install werkzeug 
-
-flask run --host=0.0.0.0 --port=5001    (pour lancer le serv) 
+python -m venv venv
+source venv/bin/activate
+pip install flask flask-sqlalchemy flask-wtf werkzeug
+pip install werkzeug
+flask run --host=0.0.0.0 --port=5001    (pour lancer le serv)
 
 
 

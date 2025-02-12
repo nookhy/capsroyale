@@ -6,10 +6,19 @@
     <ul>
         {% for match_info in matches %}
         <li>
-            <strong>Match (Mode : {{ match_info.match.mode }})</strong> entre :
+            <strong>Gagnants :</strong>
+            {% for winner in match_info.winners %}
+                {{ winner.username }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            <br>
+            <strong>Match (Mode : {{ match_info.match.mode }}) </strong> entre :
             {% for player in match_info.players %}
                 {{ player.username }}{% if not loop.last %}, {% endif %}
             {% endfor %}
+            <br>
+            {% if match_info.match.commentaire %}
+                <p class="comment">💬 "{{ match_info.match.commentaire }}"</p>
+            {% endif %}
             <br>
             Joueurs ayant confirmé : 
             {% set confirmed_players = match_info.match.confirmed_players.split(",") %}
@@ -27,6 +36,8 @@
                 <button class="btn btn-secondary" disabled>Déjà confirmé</button>
             {% else %}
                 <a href="/confirm_match/{{ match_info.match.id }}" class="btn btn-success">Confirmer</a>
+                <a href="/reject_match/{{ match_info.match.id }}" class="btn btn-danger">Refuser</a>
+
             {% endif %}
         </li>
         {% endfor %}

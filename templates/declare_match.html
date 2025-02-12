@@ -7,6 +7,7 @@
     <label for="mode">Mode de jeu :</label>
     <select name="mode" id="mode" onchange="updateFormFields()">
         <option value="Capacks">Capacks (1v1)</option>
+        <option value="16evolve">16 Evolve (1v1)</option>
         <option value="CD">CD (2v2)</option>
         <option value="Davis">Davis (2v2)</option>
         <option value="Trevis">Trevis (3v3)</option>
@@ -26,6 +27,8 @@
     </div>
 
     <button type="submit" id="submit-btn" class="btn btn-primary" disabled>Soumettre</button>
+    <label for="commentaire">Commentaire (optionnel) :</label>
+    <textarea name="commentaire" id="commentaire" rows="3" class="form-control" placeholder="Ajoutez un commentaire sur ce match"></textarea>
 </form>
 
 <script>
@@ -118,7 +121,7 @@ function searchUsers(event, inputField, datalistId) {
     const query = inputField.value;
     if (query.length < 1) return;
 
-    fetch(`/search_users?q=${query}`)
+    fetch(`/search_users?q=${encodeURIComponent(query)}`)
         .then(response => response.json())
         .then(data => {
             const datalist = document.getElementById(datalistId);

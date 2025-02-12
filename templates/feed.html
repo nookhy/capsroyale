@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>📢 Fil des Matchs Récents</h2>
+<div class="feed-container">
+    {% for match_info in matches %}
+        <div class="match-card">
+            <strong>🏆 Gagnants :</strong>
+            {% for winner in match_info.winners %}
+                {{ winner.username }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            <p><strong>{{ match_info.match.mode }}</strong> </p>
+            <p>👥 Joueurs : 
+                {% for player in match_info.players %}
+                    {{ player.username }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            {% if match_info.match.commentaire %}
+                <p class="comment">💬 "{{ match_info.match.commentaire }}"</p>
+            {% endif %}
+            <p class="timestamp">📅 {{ match_info.match.date.strftime('%d/%m/%Y %H:%M') }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+<style>
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: auto;
+}
+.match-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+.comment {
+    font-style: italic;
+    color: #555;
+}
+.timestamp {
+    font-size: 0.8em;
+    color: #888;
+}
+</style>
+{% endblock %}

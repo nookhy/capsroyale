@@ -36,7 +36,8 @@ class Match(db.Model):
     mode = db.Column(db.String(20), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
     confirmed_players = db.Column(db.Text, default="")
-    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # ✅ Corrigé
+    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  
+    commentaire = db.Column(db.Text, nullable=True)  # ✅ Nouveau champ pour le commentaire
 
 def init_db(app):
     db.init_app(app)

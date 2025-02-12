@@ -5,6 +5,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from fct import update_elo
 from sqlalchemy.sql import func
 
+
+
+
 def is_mobile():
     user_agent = request.user_agent.string.lower()
     return any(device in user_agent for device in ["iphone", "android", "mobile", "ipad", "tablet"])
@@ -43,7 +46,7 @@ def init_routes(app):
         if request.method == "POST":
             username = request.form.get("username")
             password = request.form.get("password")
-            print(password)
+            
             if not username or not password:
                 error = "Veuillez remplir tous les champs."
 
@@ -67,8 +70,7 @@ def init_routes(app):
             password = request.form.get("password")
 
             admin = Admin.query.filter_by(username=username).first()
-            print(admin)
-            print(password)
+            
             if not admin or not check_password_hash(admin.password_hash, password):
                 error = "Identifiants incorrects !"
             else:
@@ -239,7 +241,6 @@ def init_routes(app):
         )
 
 
-
     @app.route("/notifications")
     def notifications():
         print("🔥 Route /notifications appelée !")
@@ -268,9 +269,18 @@ def init_routes(app):
                 User.query.get(match.player5_id) if match.player5_id else None,
                 User.query.get(match.player6_id) if match.player6_id else None
             ]
+            players = [p for p in players if p]
+            print(f"DEBUG: players = {players}")
+            # 🔥 Déterminer les gagnants en fonction de la team gagnante
+            if match.winning_team == "Team1":
+                winners = players[:len(players) // 2]  # 🔥 La moitié des joueurs sont Team 1
+            else:
+                winners = players[len(players) // 2:]  # 🔥 L’autre moitié est Team 2
+
             matches_info.append({
-                "match": match,
-                "players": [p for p in players if p]  # 🔥 Filtrer les joueurs valides
+            "match": match,
+            "players": players,
+            "winners": winners
             })
         matches_info.reverse()
         return render_template("notifications.html", matches=matches_info, user=user)  # ✅ On passe 'user'
@@ -339,7 +349,7 @@ def init_routes(app):
                 winner_obj.elo, _ = update_elo(winner_obj.elo, moylose, match.mode)
             for loser in losers:
                 loser_obj = User.query.get(loser)
-                _, loser_obj = update_elo(moywin, loser_obj.elo, match.mode)
+                _, loser_obj.elo = update_elo(moywin, loser_obj.elo, match.mode)
 
 
         db.session.commit()
@@ -356,6 +366,8 @@ def init_routes(app):
         if request.method == "POST":
             mode = request.form.get("mode")
             winning_team = request.form.get("winning_team")
+            commentaire = request.form.get("commentaire", "").strip()  # ✅ Récupère le commentaire
+
 
             if not winning_team:  
                 return "Erreur : Vous devez sélectionner une équipe gagnante.", 400
@@ -385,7 +397,9 @@ def init_routes(app):
                 player6_id=players[5].id if len(players) > 5 else None,
                 winning_team=winning_team,
                 mode=mode,
-                confirmed=False
+                confirmed=False,
+                commentaire=commentaire  # ✅ Stocke le commentaire
+
             )
 
             db.session.add(match)
@@ -395,11 +409,77 @@ def init_routes(app):
 
         return render_template("declare_match.html", user=user)
 
+    @app.route("/reject_match/<int:match_id>")
+    def reject_match(match_id):
+        match = Match.query.get(match_id)
+        if not match:
+            return "Match introuvable.", 404  # 🔥 Retourne une erreur si le match n'existe pas
+        
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect("/login")  # 🔒 Redirige si l'utilisateur n'est pas connecté
+
+        # 🔥 Vérifie si l'utilisateur fait bien partie du match
+        players = [
+            match.player1_id, match.player2_id,
+            match.player3_id, match.player4_id,
+            match.player5_id, match.player6_id
+        ]
+        players = [p for p in players if p]  # 🔥 Supprime les joueurs `None`
+
+        if user_id not in players:
+            return "Vous ne pouvez pas refuser ce match.", 403  # 🔥 Empêche les autres de supprimer un match
+
+        print(f"🚨 Match {match.id} refusé par {user_id}, suppression en cours...")
+
+        # 🔥 Supprime le match de la base de données
+        db.session.delete(match)
+        db.session.commit()
+
+        return redirect("/notifications")
+
+    @app.route("/feed")
+    def feed():
+        matches = Match.query.filter_by(confirmed=True).order_by(Match.date.desc()).limit(50).all()  # ✅ 50 derniers matchs confirmés
+        matches_info = []
+        
+        for match in matches:
+            players = [
+                User.query.get(match.player1_id),
+                User.query.get(match.player2_id),
+                User.query.get(match.player3_id) if match.player3_id else None,
+                User.query.get(match.player4_id) if match.player4_id else None,
+                User.query.get(match.player5_id) if match.player5_id else None,
+                User.query.get(match.player6_id) if match.player6_id else None
+            ]
+            players = [p for p in players if p]
+            # 🔥 Déterminer les gagnants en fonction de la team gagnante
+            if match.winning_team == "Team1":
+                winners = players[:len(players) // 2]  # 🔥 La moitié des joueurs sont Team 1
+            else:
+                winners = players[len(players) // 2:]  # 🔥 L’autre moitié est Team 2
+
+            matches_info.append({
+                "match": match,
+                "players": players,  # 🔥 Filtrer les joueurs valides
+                "winners": winners
+            })
+
+        return render_template("feed.html", matches=matches_info)
+
+
     @app.route("/search_users")
     def search_users():
-        query = request.args.get("q", "").strip().lower()  # 🔥 Récupère la recherche
+        query = request.args.get("q", "").strip()
+        print(query)  # 🔥 Récupère la recherche
         if not query:
             return jsonify([])  # 🔥 Retourne une liste vide si rien n'est tapé
+        
+        # 🔥 S'assurer que la requête est bien encodée en UTF-8
+        try:
+            query = query.encode('utf-8').decode('utf-8')  
+        except UnicodeDecodeError:
+            return jsonify([])
 
         users = User.query.filter(User.username.ilike(f"{query}%")).limit(10).all()  # 🔍 Trouve les joueurs
         results = [{"id": user.id, "username": user.username} for user in users]  # 🔄 Formatte la réponse JSON
@@ -408,11 +488,17 @@ def init_routes(app):
     
     @app.route("/search_profile")
     def search_profile():
-        query = request.args.get("q", "").strip().lower()
+        query = request.args.get("q", "").strip()
         
         if not query:
             flash("Veuillez entrer un pseudo.", "warning")
             return redirect("/")  
+            
+        # 🔥 S'assurer que la requête est bien encodée en UTF-8
+        try:
+            query = query.encode('utf-8').decode('utf-8')  
+        except UnicodeDecodeError:
+            return jsonify([])
 
         user = User.query.filter(User.username.ilike(f"{query}%")).first()
         

@@ -1,6 +1,7 @@
 import math
 
-K = 32  # Facteur de mise à jour de l'ELO
+K  = 50  # Facteur de mise à jour de l'ELO pour gagnants
+
 
 def expected_score(player_elo, opponent_elo):
     return 1 / (1 + 10 ** ((opponent_elo - player_elo) / 400))
@@ -9,12 +10,14 @@ def update_elo(winner_elo, loser_elo, mode):
     alpha = 1
     if mode == 'Capacks':
         alpha = 1
+    if mode =='16evolve':
+        alpha = 0.75
     if mode == 'CD':
-        alpha = 1
+        alpha = 0.75
     if mode == 'Davis':
-        alpha = 1
+        alpha = 0.75
     if mode == 'Trevis':
-        alpha = 1
+        alpha = 0.75
     
     expected_win = expected_score(winner_elo, loser_elo)
     new_winner_elo = round(winner_elo + alpha*K * (1 - expected_win))
@@ -22,18 +25,21 @@ def update_elo(winner_elo, loser_elo, mode):
     return new_winner_elo, new_loser_elo
 
 def get_tier(elo):
-    if elo < 450:
+    if elo < 400:
+        return "0chiasse", "caca.png"
+    elif elo < 500:
         return "Bronze", "bronze.png"
     elif elo < 800:
         return "Argent", "argent.png"
-    elif elo < 1300:
+    elif elo < 1100:
         return "Or", "or.png"
-    elif elo < 1600:
+    elif elo < 1400:
         return "Platine", "platine.png"
-    elif elo < 2000:
+    elif elo < 1900:
         return "Diamant", "diamant.png"
     else:
         return "Légende", "legende.png"
+
 
 
 
