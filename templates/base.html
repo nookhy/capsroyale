@@ -7,13 +7,23 @@
     <title>Caps Royale</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">  <!-- 📌 Bootstrap -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+    <script src="{{ url_for('static', filename='js/all.min.js') }}" defer></script>
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="{{ url_for('static', filename='kro2.png') }}" alt="Caps Royale" class="logo-img">
+                <img src="{{ url_for('static', filename='kro2.png') }}" alt="Logo" class="logo-img">
             </a>
+            <!-- 🔔 Icône de notification -->
+            {% if session.get("user_id") %}
+            <a href="/notifications" class="notification-icon">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" class="badge" style="display: none;">!</span>
+            </a>
+            {% endif %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -116,6 +126,17 @@ function validateAndSearch() {
     const userId = selectedUser.dataset.id;  // 🔥 Récupération de l'ID
     window.location.href = `/profile/${userId}`;
 }
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/check_notifications")
+            .then(response => response.json())
+            .then(data => {
+                if (data.unread > 0) {
+                    document.getElementById("notification-badge").style.display = "flex";
+                }
+            });
+    });
     </script>
 
     <footer class="footer">

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="home-container">
+    <h1>Bienvenue sur <span class="highlight">Caps Royale 🍻</span></h1>
+    
+    <!-- 🔥 Bouton pour se connecter (uniquement si l'utilisateur n'est pas connecté) -->
+    {% if not user %}
+        <a href="/login" class="btn btn-primary connect-btn">Se Connecter</a>
+    {% endif %}
+
+    <p class="description">
+        Caps Royale est la référence à avoir pour montrer ses talents à la capsule à l'ECL. 
+        Déclare un match (Capacks, CD, etc) entre toi et tes amis, lorsque chacun aura validé (onglet 'Notifications' ou 🔔) ton classement se mettra à jour grâce à un système de ELO (comme sur Chess.com).
+        Fais tes preuves et deviens la légende de la capsule fyot.
+        Tout le monde commence avec un ELO de 400.
+        Par pitwei jouez le jeu et creez pas N comptes bidons 🥺 (sinon je vous ban 🇩🇪)
+
+    <h2>📊 Les Divisions</h2>
+    <p class="division-desc">Voici les différentes divisions selon ton niveau de jeu :</p>
+
+    <div class="divisions-container">
+        <div class="division caca">
+            <img src="{{ url_for('static', filename='icons/caca.png') }}" alt="Caca">
+            <h3>💩 0 chiasse</h3>
+            <p><strong>ELO :</strong> 0 - 350</p>
+        </div>
+
+        <div class="division bronze">
+            <img src="{{ url_for('static', filename='icons/bronze.png') }}" alt="Bronze">
+            <h3>🥉 Bronze</h3>
+            <p><strong>ELO :</strong> 350 - 500</p>
+        </div>
+
+        <div class="division silver">
+            <img src="{{ url_for('static', filename='icons/argent.png') }}" alt="Argent">
+            <h3>🥈 Argent</h3>
+            <p><strong>ELO :</strong> 500 - 800</p>
+        </div>
+
+        <div class="division gold">
+            <img src="{{ url_for('static', filename='icons/or.png') }}" alt="Or">
+            <h3>🥇 Or</h3>
+            <p><strong>ELO :</strong> 800 - 1100</p>
+        </div>
+
+        <div class="division platinum">
+            <img src="{{ url_for('static', filename='icons/platine.png') }}" alt="Platine">
+            <h3>💿 Platine</h3>
+            <p><strong>ELO :</strong> 1100 - 1400</p>
+        </div>
+
+        <div class="division diamond">
+            <img src="{{ url_for('static', filename='icons/diamant.png') }}" alt="Diamant">
+            <h3>💎 Diamant</h3>
+            <p><strong>ELO :</strong> 1400 - 1900</p>
+        </div>
+
+        <div class="division legend">
+            <img src="{{ url_for('static', filename='icons/legende.png') }}" alt="Légende">
+            <h3>🔥 Légende</h3>
+            <p><strong>ELO :</strong> 1900+</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

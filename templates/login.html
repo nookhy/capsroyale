@@ -10,7 +10,7 @@
 
 <form method="POST">
     <label for="username">Pseudo :</label>
-    <input type="text" name="username" required>
+    <input type="text" name="username" required onblur="this.value=this.value.trim()">
 
     <label for="password">Mot de passe :</label>
     <input type="password" name="password" required>

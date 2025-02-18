@@ -17,12 +17,33 @@ def init_routes(app):
     @app.route("/")
     def index():
         mobile = is_mobile()
-        return render_template("index.html", mobile=mobile)
+        user = None
+        if "user_id" in session:
+            user = User.query.get(session["user_id"])  # 🔥 Récupère l'utilisateur connecté
+        return render_template("home.html", user=user, mobile=mobile)  # ✅ On envoie user + mobile
+    
 
+    @app.route("/check_notifications")
+    def check_notifications():
+        if "user_id" not in session:
+            return jsonify({"unread": 0})
+
+        user_id = session["user_id"]
+
+        # 🔥 Vérifie s'il y a des matchs non confirmés pour ce joueur
+        pending_matches = Match.query.filter(
+            ((Match.player1_id == user_id) | (Match.player2_id == user_id) |
+            (Match.player3_id == user_id) | (Match.player4_id == user_id) |
+            (Match.player5_id == user_id) | (Match.player6_id == user_id)),
+            Match.confirmed == False
+        ).count()
+
+        return jsonify({"unread": pending_matches})
+    
     @app.route("/register", methods=["GET", "POST"])
     def register():
         if request.method == "POST":
-            username = request.form["username"]
+            username = request.form.get("username", "").strip()
             password = request.form["password"]
             floor = request.form["floor"]
             year = request.form["year"]
@@ -44,7 +65,7 @@ def init_routes(app):
         error = None  # 🔥 Ajout d'une variable pour gérer les erreurs
 
         if request.method == "POST":
-            username = request.form.get("username")
+            username = request.form.get("username", "").strip()
             password = request.form.get("password")
             
             if not username or not password:

@@ -102,10 +102,13 @@ function updateFormFields() {
 
 // 🔥 Vérifie que chaque joueur est unique
 function checkDuplicatePlayers() {
-    const inputs = document.querySelectorAll("#player-fields input");
-    const values = Array.from(inputs).map(input => input.value);
+    const inputs = document.querySelectorAll("#player-fields input"); 
+    const values = Array.from(inputs)
+        .map(input => input.value.trim())  // 🔥 On enlève les espaces
+        .filter(value => value !== "");    // ✅ On ignore les champs vides
     const uniqueValues = new Set(values);
-
+    console.log("values length:", values.length)
+    console.log("values size:", uniqueValues.size)
     if (values.length !== uniqueValues.size) {
         alert("Un joueur ne peut pas être sélectionné plusieurs fois !");
         inputs.forEach(input => {

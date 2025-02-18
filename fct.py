@@ -25,7 +25,7 @@ def update_elo(winner_elo, loser_elo, mode):
     return new_winner_elo, new_loser_elo
 
 def get_tier(elo):
-    if elo < 400:
+    if elo < 350:
         return "0chiasse", "caca.png"
     elif elo < 500:
         return "Bronze", "bronze.png"
