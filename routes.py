@@ -185,9 +185,10 @@ def init_routes(app):
 
         # 🔥 Récupérer les matchs où le joueur a participé
         matches = Match.query.filter(
-            (Match.player1_id == user.id) | (Match.player2_id == user.id) |
+            ((Match.player1_id == user.id) | (Match.player2_id == user.id) |
             (Match.player3_id == user.id) | (Match.player4_id == user.id) |
-            (Match.player5_id == user.id) | (Match.player6_id == user.id)
+            (Match.player5_id == user.id) | (Match.player6_id == user.id)),
+            Match.confirmed == True # 🔥 On filtre les matchs confirmés uniquement
         ).order_by(Match.date.desc()).all()
 
         match_history = []
@@ -461,7 +462,7 @@ def init_routes(app):
 
     @app.route("/feed")
     def feed():
-        matches = Match.query.filter(confirmed=True).order_by(Match.date.desc()).limit(50).all()  # ✅ 50 derniers matchs confirmés
+        matches = Match.query.filter(Match.confirmed==True).order_by(Match.date.desc()).limit(50).all()  # ✅ 50 derniers matchs confirmés
         matches_info = []
         
         for match in matches:
