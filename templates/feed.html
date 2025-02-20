@@ -6,19 +6,19 @@
     {% for match_info in matches %}
         <div class="match-card">
             <strong>🏆 Gagnants :</strong>
-            {% for winner in match_info["winners"] %}
+            {% for winner in match_info.winners %}
                 {{ winner.username }}{% if not loop.last %}, {% endif %}
             {% endfor %}
-            <p><strong>{{ match_info["match"].mode }}</strong> </p>
+            <p><strong>{{ match_info.match.mode }}</strong> </p>
             <p>👥 Joueurs : 
-                {% for player in match_info["players"] %}
+                {% for player in match_info.players %}
                     {{ player.username }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
-            {% if match_info["match"].commentaire %}
+            {% if match_info.match.commentaire %}
                 <p class="comment">💬 "{{ match_info.match.commentaire }}"</p>
             {% endif %}
-            <p class="timestamp">📅 {{ match_info["match"].date.strftime('%d/%m/%Y %H:%M') }}</p>
+            <p class="timestamp">📅 {{ match_info.match.date.strftime('%d/%m/%Y %H:%M') }}</p>
         </div>
     {% endfor %}
 </div>
