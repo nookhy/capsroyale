@@ -11,13 +11,13 @@ def update_elo(winner_elo, loser_elo, mode):
     if mode == 'Capacks':
         alpha = 1
     if mode =='16evolve':
-        alpha = 0.75
+        alpha = 0.5
     if mode == 'CD':
-        alpha = 0.75
+        alpha = 0.5
     if mode == 'Davis':
-        alpha = 0.75
+        alpha = 0.5
     if mode == 'Trevis':
-        alpha = 0.75
+        alpha = 0.5
     
     expected_win = expected_score(winner_elo, loser_elo)
     new_winner_elo = round(winner_elo + alpha*K * (1 - expected_win))
