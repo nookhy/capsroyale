@@ -22,3 +22,9 @@ postgresql: postgresql://neondb_owner:npg_AWxw6HP8rvFC@ep-lingering-bread-a9askr
 https://console.neon.tech/app/projects/autumn-sun-17798779/branches/br-dawn-meadow-a9yerblh/tables?database=neondb
 
 https://dashboard.render.com/web/srv-cugt9d8gph6c73d5uf8g/logs
+
+
+pour maj du site depuis raspberry:
+ssh wflouret@IP_PUBLIQUE_DE_TON_AMI
+cd /home/wflouret/capsroyale
+./deploy.sh
