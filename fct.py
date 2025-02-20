@@ -11,7 +11,7 @@ def update_elo(winner_elo, loser_elo, mode):
     if mode == 'Capacks':
         alpha = 1
     if mode =='16evolve':
-        alpha = 0.5
+        alpha = 0.6
     if mode == 'CD':
         alpha = 0.5
     if mode == 'Davis':
