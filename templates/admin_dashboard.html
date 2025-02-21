@@ -56,19 +56,29 @@
             <td>{{ match.date.strftime('%d/%m/%Y %H:%M') }}</td>
             <td>{{ match.mode }}</td>
             <td>
-                {% if match.winning_team == "Team1" %}
-                    {% for player in match.players[:match.players|length // 2] %}
-                        {{ player.username }}{% if not loop.last %}, {% endif %}
-                    {% endfor %}
-                {% else %}
-                    {% for player in match.players[match.players|length // 2:] %}
-                        {{ player.username }}{% if not loop.last %}, {% endif %}
-                    {% endfor %}
-                {% endif %}
+                {% set players = [
+                    match.player1_id, match.player2_id,
+                    match.player3_id, match.player4_id,
+                    match.player5_id, match.player6_id
+                ] %}
+                {% set team1 = players[:players|length // 2] %}
+                {% set team2 = players[players|length // 2:] %}
+            
+                {% set winning_team = team1 if match.winning_team == "Team1" else team2 %}
+                {% for player_id in winning_team if player_id %}
+                    {% set player = users | selectattr("id", "equalto", player_id) | first %}
+                    {{ player.username if player else "Joueur supprimé" }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
             </td>
             <td>
-                {% for player in match.players %}
-                    {{ player.username }}{% if not loop.last %}, {% endif %}
+                {% set players = [
+                    match.player1_id, match.player2_id,
+                    match.player3_id, match.player4_id,
+                    match.player5_id, match.player6_id
+                ] %}
+                {% for player_id in players if player_id %}
+                    {% set player = users | selectattr("id", "equalto", player_id) | first %}
+                    {{ player.username if player else "Joueur supprimé" }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </td>
             <td>
