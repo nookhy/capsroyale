@@ -292,7 +292,7 @@ def init_routes(app):
         user = User.query.get(session["user_id"])
         if not user:  # 🛑 Cas où l'utilisateur a été supprimé
             session.pop("user_id", None)
-        return redirect("/login")
+            return redirect("/login")
 
         # 🔥 Récupère uniquement les matchs qui ne sont PAS confirmés
         pending_matches = Match.query.filter(
