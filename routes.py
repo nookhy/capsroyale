@@ -462,7 +462,7 @@ def init_routes(app):
 
     @app.route("/feed")
     def feed():
-        matches = Match.query.filter(Match.confirmed==True).order_by(Match.date.desc()).all()  # ✅ 50 derniers matchs confirmés
+        matches = Match.query.filter(Match.confirmed==True).limit(50).all()  # ✅ 50 derniers matchs confirmés
         for match in matches:
             if isinstance(match.date, int):
                 match.date = str(match.date) 
