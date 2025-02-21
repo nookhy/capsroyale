@@ -192,6 +192,11 @@ def init_routes(app):
         session.pop("user_id", None)  # 🔥 Supprime l'utilisateur de la session
         return redirect("/login") 
 
+    @app.route("/logout_admin")
+    def logout_admin():
+        session.pop("admin_id", None)  # 🔥 Supprime l'ID admin de la session
+        return redirect("/admin_login")  # ✅ Redirige vers la page de connexion admin
+
     @app.route("/profile")
     def profile():
         if "user_id" not in session:
