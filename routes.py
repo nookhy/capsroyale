@@ -106,7 +106,24 @@ def init_routes(app):
             return redirect("/admin_login")
 
         users = User.query.all()  # 🔥 Récupère tous les utilisateurs
-        return render_template("admin_dashboard.html", users=users)
+        matches = Match.query.order_by(Match.date.desc()).all()  # 🔥 Récupère tous les matchs par date
+        return render_template("admin_dashboard.html", users=users, matches=matches)
+        
+    
+    @app.route("/delete_match/<int:match_id>", methods=["POST"])
+    def delete_match(match_id):
+        if "admin_id" not in session:
+            return redirect("/admin_login")
+
+        match = Match.query.get(match_id)
+        if match:
+            db.session.delete(match)
+            db.session.commit()
+            flash("Match supprimé avec succès", "success")
+        else:
+            flash("Match introuvable", "danger")
+
+        return redirect("/admin_dashboard")
 
     @app.route("/reset_password/<int:user_id>", methods=["GET", "POST"])
     def reset_password(user_id):

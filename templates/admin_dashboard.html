@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a href="/logout_admin" class="btn btn-secondary mt-3">Déconnexion</a>
+
 <h2>Tableau de bord Administrateur</h2>
 
 <table class="table table-striped">
@@ -35,5 +37,51 @@
     </tbody>
 </table>
 
-<a href="/logout_admin" class="btn btn-secondary mt-3">Déconnexion</a>
+<h3>Liste des matchs</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Mode</th>
+            <th>Gagnants</th>
+            <th>Joueurs</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for match in matches %}
+        <tr>
+            <td>{{ match.id }}</td>
+            <td>{{ match.date.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ match.mode }}</td>
+            <td>
+                {% if match.winning_team == "Team1" %}
+                    {% for player in match.players[:match.players|length // 2] %}
+                        {{ player.username }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for player in match.players[match.players|length // 2:] %}
+                        {{ player.username }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </td>
+            <td>
+                {% for player in match.players %}
+                    {{ player.username }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                <form action="/delete_match/{{ match.id }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce match ?')">
+                        Supprimer
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
 {% endblock %}
