@@ -198,6 +198,9 @@ def init_routes(app):
             return redirect("/login")
 
         user = User.query.get(session["user_id"])
+        if not user:  # 🛑 Cas où l'utilisateur n'existe pas (supprimé ou invalide)
+            session.pop("user_id", None)  # Supprime l'ID invalide de la session
+            return redirect("/login")  # Redirige vers la connexion
         tier, icon = get_tier(user.elo)
 
         # 🔥 Récupérer les matchs où le joueur a participé
@@ -287,6 +290,9 @@ def init_routes(app):
             return redirect("/login")
 
         user = User.query.get(session["user_id"])
+        if not user:  # 🛑 Cas où l'utilisateur a été supprimé
+            session.pop("user_id", None)
+        return redirect("/login")
 
         # 🔥 Récupère uniquement les matchs qui ne sont PAS confirmés
         pending_matches = Match.query.filter(
