@@ -1,6 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
+import pytz
 from werkzeug.security import generate_password_hash, check_password_hash
+
+local_tz = pytz.timezone('Europe/Paris')
 
 
 db = SQLAlchemy()
@@ -38,7 +41,7 @@ class Match(db.Model):
     mode = db.Column(db.String(20), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
     confirmed_players = db.Column(db.Text, default="")
-    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  
+    date = db.Column(db.DateTime, default=lambda: datetime.now(local_tz))  
     commentaire = db.Column(db.Text, nullable=True)  # ✅ Nouveau champ pour le commentaire
 
 def init_db(app):

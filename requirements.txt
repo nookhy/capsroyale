@@ -4,4 +4,5 @@ Flask-WTF
 gunicorn
 psycopg2-binary
 flask-migrate
+pytz
 
