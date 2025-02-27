@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, jsonify, flash, url_for
-from models import db, User, Match, Admin
+from models import db, User, Match, Admin, DrawMatch
 from fct import update_elo, get_tier
 from werkzeug.security import generate_password_hash, check_password_hash
 from fct import update_elo
@@ -158,6 +158,27 @@ def init_routes(app):
         db.session.commit()
         return redirect("/admin_dashboard")
 
+    @app.route("/edit_elo/<int:user_id>", methods=["GET", "POST"])
+    def edit_elo(user_id):
+        if "admin_id" not in session:
+            return redirect("/admin_login")
+
+        user = User.query.get(user_id)
+        if not user:
+            return "Utilisateur introuvable", 404
+
+        if request.method == "POST":
+            new_elo = request.form.get("new_elo")
+            try:
+                new_elo = int(new_elo)
+            except ValueError:
+                return "Le ELO doit être un nombre valide.", 400
+
+            user.elo = new_elo  # 🔥 Mise à jour du ELO
+            db.session.commit()
+            return redirect("/admin_dashboard")
+
+        return render_template("edit_elo.html", user=user)
 
     @app.route("/edit_profile", methods=["GET", "POST"])
     def edit_profile():
@@ -234,8 +255,10 @@ def init_routes(app):
 
             if match.winning_team == "Team1":
                 result = "Victoire" if user in team1 else "Défaite"
-            else:
+            elif match.winning_team == "Team2":
                 result = "Victoire" if user in team2 else "Défaite"
+            else:
+                result = "Match nul"
 
             match_history.append({
                 "date": match.date.strftime("%d/%m/%Y %H:%M"),
@@ -324,8 +347,10 @@ def init_routes(app):
             # 🔥 Déterminer les gagnants en fonction de la team gagnante
             if match.winning_team == "Team1":
                 winners = players[:len(players) // 2]  # 🔥 La moitié des joueurs sont Team 1
-            else:
+            elif match.winning_team == "Team2":
                 winners = players[len(players) // 2:]  # 🔥 L’autre moitié est Team 2
+            else:
+                winners = [DrawMatch("Égalité")]  # 🔥 Sinon, c'est un match nul
 
             matches_info.append({
             "match": match,
@@ -379,11 +404,18 @@ def init_routes(app):
             team1 = players[:len(players) // 2]
             team2 = players[len(players) // 2:]
 
+            draw = False
             # Déterminer les gagnants et les perdants
             if match.winning_team == "Team1":
                 winners, losers = team1, team2
-            else:
+                draw = False
+            elif match.winning_team == "Team2":
                 winners, losers = team2, team1
+                draw = False
+            else:
+                winners, losers = team1, team2
+                draw = True
+
 
             # 🔥 Mise à jour de l'ELO pour chaque joueur
             moywin = 0
@@ -396,10 +428,10 @@ def init_routes(app):
                     moylose += loser_obj.elo / len(losers)
             for winner in winners:
                 winner_obj = User.query.get(winner)
-                winner_obj.elo, _ = update_elo(winner_obj.elo, moylose, match.mode)
+                winner_obj.elo, _ = update_elo(winner_obj.elo, moylose, match.mode, draw)
             for loser in losers:
                 loser_obj = User.query.get(loser)
-                _, loser_obj.elo = update_elo(moywin, loser_obj.elo, match.mode)
+                _, loser_obj.elo = update_elo(moywin, loser_obj.elo, match.mode, draw)
 
 
         db.session.commit()
@@ -509,8 +541,10 @@ def init_routes(app):
             # 🔥 Déterminer les gagnants en fonction de la team gagnante
             if match.winning_team == "Team1":
                 winners = players[:len(players) // 2]  # 🔥 La moitié des joueurs sont Team 1
-            else:
+            elif match.winning_team == "Team2":
                 winners = players[len(players) // 2:]  # 🔥 L’autre moitié est Team 2
+            else: 
+                winners = [DrawMatch("Égalité")]
 
             matches_info.append({
                 "match": match,
@@ -593,8 +627,10 @@ def init_routes(app):
 
             if match.winning_team == "Team1":
                 result = "Victoire" if user in team1 else "Défaite"
-            else:
+            elif match.winning_team == "Team2":
                 result = "Victoire" if user in team2 else "Défaite"
+            else:
+                result = "Match nul"
 
             match_history.append({
                 "date": match.date.strftime("%d/%m/%Y %H:%M"),

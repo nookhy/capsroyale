@@ -22,7 +22,9 @@ class Admin(db.Model):
         self.password_hash = generate_password_hash(password)  # 🔒 Hash sécurisé
 
     
-
+class DrawMatch():
+    def  __init__(self, username):
+        self.username = username
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)

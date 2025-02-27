@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Modifier le ELO de {{ user.username }}</h2>
+
+<form method="POST">
+    <label for="new_elo">Nouveau ELO :</label>
+    <input type="number" id="new_elo" name="new_elo" value="{{ user.elo }}" required>
+    
+    <button type="submit" class="btn btn-success">Mettre à jour</button>
+    <a href="/admin_dashboard" class="btn btn-secondary">Annuler</a>
+</form>
+
+{% endblock %}
