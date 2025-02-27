@@ -65,11 +65,15 @@
                 {% set team1 = players[:players|length // 2] %}
                 {% set team2 = players[players|length // 2:] %}
             
-                {% set winning_team = team1 if match.winning_team == "Team1" else team2 %}
-                {% for player_id in winning_team if player_id %}
-                    {% set player = users | selectattr("id", "equalto", player_id) | first %}
-                    {{ player.username if player else "Joueur supprimé" }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
+                {% if match.draw %}
+                    <strong>Match nul</strong>
+                {% else %}
+                    {% set winning_team = team1 if match.winning_team == "Team1" else team2 %}
+                    {% for player_id in winning_team if player_id %}
+                        {% set player = users | selectattr("id", "equalto", player_id) | first %}
+                        {{ player.username if player else "Joueur supprimé" }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
             </td>
             <td>
                 {% set players = [
