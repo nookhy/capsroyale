@@ -29,4 +29,6 @@ ssh wflouret@87.89.138.171
 cd /home/wflouret/capsroyale
 ./deploy.sh
 
+nom de domaine (compte avec adresse eclcapsroyale)
+
 
