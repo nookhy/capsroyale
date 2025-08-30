@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Modifier mes informations</h2>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     <label for="username">Nouveau Pseudo :</label>
     <input type="text" name="username" value="{{ user.username }}">
 
@@ -41,6 +41,11 @@
         <option value="4A">4A</option>
         <option value="Ancien">Ancien</option>
     </select>
+
+    <!-- 🔥 Ajout / changement de photo -->
+    <label for="profile_picture">Nouvelle photo de profil :</label>
+    <input type="file" name="profile_picture" accept="image/*">
+
 
     <button type="submit" class="btn btn-success mt-3">Enregistrer</button>
 </form>

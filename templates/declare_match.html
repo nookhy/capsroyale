@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Déclarer un match</h2>
 
-<form method="POST" onsubmit="return validatePlayers()">
+<form method="POST" enctype="multipart/form-data" onsubmit="return validatePlayers()">
     <label for="mode">Mode de jeu :</label>
     <select name="mode" id="mode" onchange="updateFormFields()">
         <option value="Capacks">Capacks (1v1)</option>
@@ -30,6 +30,8 @@
     <button type="submit" id="submit-btn" class="btn btn-primary" disabled>Soumettre</button>
     <label for="commentaire">Commentaire (optionnel) :</label>
     <textarea name="commentaire" id="commentaire" rows="3" class="form-control" placeholder="Ajoutez un commentaire sur ce match"></textarea>
+    <label for="photo">Photo du match (optionnel) :</label>
+    <input type="file" name="photo" accept="image/*" class="form-control">
 </form>
 
 <script>

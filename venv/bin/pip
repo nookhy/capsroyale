@@ -1,4 +1,4 @@
-#!/Users/williamflouret/Documents/ECL/caps_ranking/venv/bin/python
+#!/Users/williamflouret/Documents/GitHub/capsroyale/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

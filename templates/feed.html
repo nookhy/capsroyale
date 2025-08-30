@@ -18,6 +18,11 @@
             {% if match_info.match.commentaire %}
                 <p class="comment">💬 "{{ match_info.match.commentaire }}"</p>
             {% endif %}
+            {% if match_info.match.photo_filename %}
+                <div class="match-photo">
+                    <img src="{{ url_for('static', filename='uploads/' ~ match_info.match.photo_filename) }}" alt="Photo du match" class="img-fluid">
+                </div>
+            {% endif %}
             <p class="timestamp">📅 {{ match_info.match.date.strftime('%d/%m/%Y %H:%M') }}</p>
         </div>
     {% endfor %}

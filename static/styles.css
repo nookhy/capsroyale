@@ -44,6 +44,17 @@ body {
 }
 
 
+.match-photo {
+    margin-top: 10px;
+    text-align: center;
+}
+.match-photo img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
 
 #search-results li {
     padding: 10px;
@@ -119,6 +130,12 @@ body {
 .highlight {
     color: #e63946;
     font-weight: bold;
+}
+
+.ranking-highlight {
+    background-color: #fff8b3; /* 🔥 Jaune pâle pour attirer l’attention */
+    font-weight: bold;
+    color: #e63946 !important; /* Texte noir lisible */
 }
 
 .division-desc {
@@ -322,4 +339,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.match-photo {
+    margin-top: 10px;
+    text-align: center;
+}
+.match-photo img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }

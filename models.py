@@ -8,6 +8,7 @@ local_tz = pytz.timezone('Europe/Paris')
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -15,6 +16,7 @@ class User(db.Model):
     floor = db.Column(db.String(10), nullable=False)
     year = db.Column(db.String(10), nullable=False)
     elo = db.Column(db.Integer, default=400)
+    profile_picture = db.Column(db.String(200), nullable=True)  # 🔥 chemin de la photo
 
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,6 +45,7 @@ class Match(db.Model):
     confirmed_players = db.Column(db.Text, default="")
     date = db.Column(db.DateTime, default=lambda: datetime.now(local_tz))  
     commentaire = db.Column(db.Text, nullable=True)  # ✅ Nouveau champ pour le commentaire
+    photo_filename = db.Column(db.String(200), nullable=True)  # 🔥 Nom du fichier image
 
 def init_db(app):
     db.init_app(app)

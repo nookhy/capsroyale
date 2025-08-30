@@ -19,6 +19,14 @@
             {% if match_info.match.commentaire %}
                 <p class="comment">💬 "{{ match_info.match.commentaire }}"</p>
             {% endif %}
+
+            {% if match_info.match.photo_filename %}
+                <div class="match-photo" style="margin: 10px 0;">
+                    <img src="{{ url_for('static', filename='uploads/' ~ match_info.match.photo_filename) }}"
+                         alt="Photo du match"
+                         style="max-width: 300px; height: auto; border-radius: 6px; display: block;">
+                </div>
+            {% endif %}
             <br>
             Joueurs ayant confirmé : 
             {% set confirmed_players = match_info.match.confirmed_players.split(",") %}
