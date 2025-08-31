@@ -8,7 +8,7 @@ MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 Mo
 UPLOAD_FOLDER = os.path.join("static", "uploads")
 UPLOAD_FOLDER_PROFILE = os.path.join("static", "profiles")
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 # Crée le dossier s’il n’existe pas
 if not os.path.exists(UPLOAD_FOLDER):
