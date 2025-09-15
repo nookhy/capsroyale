@@ -7,12 +7,12 @@
     "theme_color": "#2c3e50",
     "icons": [
         {
-            "src": "/static/kro.png",
+            "src": "/static/kro2.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/static/kro2.png",
+            "src": "/static/kro.png",
             "sizes": "512x512",
             "type": "image/png"
         }
