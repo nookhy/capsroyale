@@ -1,50 +1,84 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h2>Inscription</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <label for="username">Pseudo :</label>
-        <input type="text" name="username" required>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">✨ Crée ton compte ✨</h2>
+    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        
+        <!-- Pseudo -->
+        <div class="mb-3">
+            <label for="username" class="form-label">Pseudo :</label>
+            <input type="text" name="username" class="form-control" placeholder="Ton pseudo" required>
+        </div>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" name="password" required>
+        <!-- Mot de passe -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe :</label>
+            <input type="password" name="password" class="form-control" placeholder="Choisis un mot de passe" required>
+        </div>
 
-        <label for="floor">Étage :</label>
-        <select name="floor">
-            <option value="V45">V45</option>
-            <option value="U56">U56</option>
-            <option value="V6">V6</option>
-            <option value="T21">T21</option>
-            <option value="C3">C3</option>
-            <option value="Adoma">Adoma (hors C3)</option>
-            <option value="T4">T4</option>
-            <option value="X4">X4</option>
-            <option value="X2">X2</option>
-            <option value="X3">X3</option>
-            <option value="T56">T56</option>
-            <option value="V3">V3</option>
-            <option value="T3">T3</option>
-            <option value="X5">X5</option>
-            <option value="U4">U4</option>
-            <option value="Exté">Exté</option>
-            <option value="Autre">Autre</option>
-        </select>
+        <!-- Étage -->
+        <div class="mb-3">
+            <label for="floor" class="form-label">Étage :</label>
+            <select name="floor" class="form-select">
+                <option disabled selected>-- Choisis ton étage --</option>
+                <option value="V45">V45</option>
+                <option value="U56">U56</option>
+                <option value="V6">V6</option>
+                <option value="T21">T21</option>
+                <option value="C3">C3</option>
+                <option value="Adoma">Adoma (hors C3)</option>
+                <option value="T4">T4</option>
+                <option value="X4">X4</option>
+                <option value="X2">X2</option>
+                <option value="X3">X3</option>
+                <option value="T56">T56</option>
+                <option value="V3">V3</option>
+                <option value="T3">T3</option>
+                <option value="X5">X5</option>
+                <option value="U4">U4</option>
+                <option value="Exté">Exté</option>
+                <option value="Autre">Autre</option>
+            </select>
+        </div>
 
-        <label for="year">Année :</label>
-        <select name="year">
-            <option value="0A">0A</option>
-            <option value="2A">2A</option>
-            <option value="3A">3A</option>
-            <option value="4A">4A</option>
-            <option value="Ancien">Ancien</option>
-        </select>
+        <!-- Année -->
+        <div class="mb-3">
+            <label for="year" class="form-label">Année :</label>
+            <select name="year" class="form-select">
+                <option disabled selected>-- Choisis ton année --</option>
+                <option value="0A">0A</option>
+                <option value="2A">2A</option>
+                <option value="3A">3A</option>
+                <option value="4A">4A</option>
+                <option value="Ancien">Ancien</option>
+            </select>
+        </div>
 
-        <!-- 🔥 Ajout photo de profil -->
-        <label for="profile_picture">Photo de profil (optionnel) :</label>
-        <input type="file" name="profile_picture" accept="image/*">
+        <!-- Photo de profil -->
+        <div class="mb-3">
+            <label for="profile_picture" class="form-label">Photo de profil (optionnel) :</label>
+            <input type="file" name="profile_picture" id="profile_picture" class="form-control" accept="image/*" onchange="previewImage(event)">
+            <div class="mt-3 text-center">
+                <img id="profile-preview" src="{{ url_for('static', filename='default_profile.png') }}" alt="Aperçu photo" class="rounded-circle shadow" width="120">
+            </div>
+        </div>
 
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
+        <!-- Bouton -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success px-4">🚀 S'inscrire</button>
+        </div>
     </form>
 </div>
+
+<!-- Script d’aperçu image -->
+<script>
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function(){
+        document.getElementById("profile-preview").src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 {% endblock %}
