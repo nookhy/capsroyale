@@ -15,8 +15,10 @@ class User(db.Model):
     password = db.Column(db.String(500), nullable=False)
     floor = db.Column(db.String(10), nullable=False)
     year = db.Column(db.String(10), nullable=False)
-    elo = db.Column(db.Integer, default=400)
     profile_picture = db.Column(db.String(200), nullable=True)  # 🔥 chemin de la photo
+    # 🔥 Elo séparés
+    elo = db.Column(db.Integer, default=400)
+    elo_coincoin = db.Column(db.Integer, default=400)
 
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)

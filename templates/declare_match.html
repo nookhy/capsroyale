@@ -4,13 +4,18 @@
 <h2>Déclarer un match</h2>
 
 <form method="POST" enctype="multipart/form-data" onsubmit="return validatePlayers()">
-    <label for="mode">Mode de jeu :</label>
+    <label for="mode">Jeu :</label>
     <select name="mode" id="mode" onchange="updateFormFields()">
-        <option value="Capacks">Capacks (1v1)</option>
-        <option value="16evolve">16 Evolve (1v1)</option>
-        <option value="CD">CD (2v2)</option>
-        <option value="Davis">Davis (2v2)</option>
-        <option value="Trevis">Trevis (3v3)</option>
+        <optgroup label="🎯 Caps">
+            <option value="Capacks">Capacks (1v1)</option>
+            <option value="16evolve">16 Evolve (1v1)</option>
+            <option value="CD">CD (2v2)</option>
+            <option value="Davis">Davis (2v2)</option>
+            <option value="Trevis">Trevis (3v3)</option>
+        </optgroup>
+        <optgroup label="🍺 Coin Coin">
+            <option value="CoinCoin">Coin Coin (2v2)</option>
+        </optgroup>
     </select>
 
     <div id="player-fields">
@@ -45,7 +50,7 @@ function updateFormFields() {
     container.innerHTML = "";  
 
     let numPlayers = 2;  
-    if (mode === "CD" || mode === "Davis") {
+    if (mode === "CD" || mode === "Davis" || mode === "CoinCoin") {
         numPlayers = 4;
     } else if (mode === "Trevis") {
         numPlayers = 6;

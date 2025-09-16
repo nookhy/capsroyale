@@ -326,11 +326,11 @@ def init_routes(app):
 
     @app.route("/ranking")
     def ranking():
-        players = User.query.order_by(User.elo.desc()).all()  # Classement général
         current_user_id = session.get("user_id")
-        
-        
-        # 🔥 Ajouter les tiers aux joueurs
+
+        # 🔥 Classement général (Caps = elo classique)
+        players = User.query.order_by(User.elo.desc()).all()
+
         ranked_players = []
         for player in players:
             tier, icon = get_tier(player.elo)
@@ -345,7 +345,24 @@ def init_routes(app):
                 "profile_picture": player.profile_picture
             })
 
-        # 🔥 Classement des étages par SOMME des ELO
+        # 🔥 Classement Coin Coin (nouveau champ elo_coincoin)
+        coincoin_players = User.query.order_by(User.elo_coincoin.desc()).all()
+
+        ranked_coincoin = []
+        for player in coincoin_players:
+            tier, icon = get_tier(player.elo_coincoin)
+            ranked_coincoin.append({
+                "id": player.id,
+                "username": player.username,
+                "floor": player.floor,
+                "year": player.year,
+                "elo": player.elo_coincoin,
+                "tier": tier,
+                "icon": icon,
+                "profile_picture": player.profile_picture
+            })
+
+        # 🔥 Classement des étages par SOMME des ELO (Caps uniquement)
         ranking_by_total = (
             db.session.query(User.floor, func.sum(User.elo).label("total_elo"))
             .group_by(User.floor)
@@ -353,7 +370,7 @@ def init_routes(app):
             .all()
         )
 
-        # 🔥 Classement des étages par MOYENNE des ELO
+        # 🔥 Classement des étages par MOYENNE des ELO (Caps uniquement)
         ranking_by_average = (
             db.session.query(User.floor, func.avg(User.elo).label("avg_elo"))
             .group_by(User.floor)
@@ -363,12 +380,12 @@ def init_routes(app):
 
         return render_template(
             "ranking.html",
-            players=ranked_players,
-            ranking_by_total=ranking_by_total,
-            ranking_by_average=ranking_by_average,
-            current_user_id=current_user_id  # Passe l'ID de l'utilisateur connecté
+            players=ranked_players,             # classement général Caps
+            coincoin_players=ranked_coincoin,   # classement Coin Coin
+            ranking_by_total=ranking_by_total,  # étages total
+            ranking_by_average=ranking_by_average,  # étages moyenne
+            current_user_id=current_user_id
         )
-
 
     @app.route("/notifications")
     def notifications():
@@ -475,22 +492,31 @@ def init_routes(app):
                 winners, losers = team1, team2
                 draw = True
 
+            # ✅ On choisit le bon champ Elo
+            elo_field = "elo_coincoin" if match.mode == "CoinCoin" else "elo"
 
-            # 🔥 Mise à jour de l'ELO pour chaque joueur
+
+            # 🔥 Calcul des moyennes AVANT toute modif
             moywin = 0
             moylose = 0
             for winner in winners:
-                for loser in losers:
-                    winner_obj = User.query.get(winner)
-                    loser_obj = User.query.get(loser)
-                    moywin += winner_obj.elo / len(winners)
-                    moylose += loser_obj.elo / len(losers)
-            for winner in winners:
                 winner_obj = User.query.get(winner)
-                winner_obj.elo, _ = update_elo(winner_obj.elo, moylose, match.mode, draw)
+                moywin += getattr(winner_obj, elo_field) / len(winners)
             for loser in losers:
                 loser_obj = User.query.get(loser)
-                _, loser_obj.elo = update_elo(moywin, loser_obj.elo, match.mode, draw)
+                moylose += getattr(loser_obj, elo_field) / len(losers)
+
+            # 🔥 Mise à jour des gagnants (avec les moyennes figées ci-dessus)
+            for winner in winners:
+                winner_obj = User.query.get(winner)
+                new_winner_elo, _ = update_elo(getattr(winner_obj, elo_field), moylose, match.mode, draw)
+                setattr(winner_obj, elo_field, new_winner_elo)
+
+            # 🔥 Mise à jour des perdants (idem, moyennes figées)
+            for loser in losers:
+                loser_obj = User.query.get(loser)
+                _, new_loser_elo = update_elo(moywin, getattr(loser_obj, elo_field), match.mode, draw)
+                setattr(loser_obj, elo_field, new_loser_elo)
 
 
         db.session.commit()

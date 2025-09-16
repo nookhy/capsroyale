@@ -9,15 +9,18 @@ def expected_score(player_elo, opponent_elo):
 def update_elo(winner_elo, loser_elo, mode, draw):
     alpha = 1
     if mode == 'Capacks':
-        alpha = 1
+        alpha = 1.5
     if mode =='16evolve':
-        alpha = 0.6
+        alpha = 0.8
     if mode == 'CD':
-        alpha = 0.5
+        alpha = 0.7
     if mode == 'Davis':
-        alpha = 0.5
+        alpha = 0.6
     if mode == 'Trevis':
-        alpha = 0.5
+        alpha = 0.7
+    if mode == 'CoinCoin':
+        alpha = 1
+
     
     expected_win = expected_score(winner_elo, loser_elo)
     if not draw:
