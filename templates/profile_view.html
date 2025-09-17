@@ -8,7 +8,9 @@
 
 <p>Étage : {{ user.floor }}</p>
 <p>Année : {{ user.year }}</p>
-<p>ELO : {{ user.elo }}</p>
+<p>ELO Caps : {{ user.elo }}</p>
+<p>ELO CoinCoin: {{ user.elo_coincoin }}</p>
+
 
 <h3>Tier : {{ tier }}</h3>
 <img src="{{ url_for('static', filename='icons/' + icon) }}" alt="{{ tier }}" width="50">
