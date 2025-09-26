@@ -89,11 +89,7 @@
                 {% endfor %}
             </td>
             <td>
-                {% if match.confirmed %}
-                    <span class="badge bg-success">Confirmé</span>
-                {% else %}
-                    <span class="badge bg-warning text-dark">En attente</span>
-                {% endif %}
+                {{ match.confirmed }} 
             </td>
             <td>
                 <form action="/delete_match/{{ match.id }}" method="POST" style="display:inline;">
