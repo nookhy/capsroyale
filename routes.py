@@ -132,6 +132,8 @@ def init_routes(app):
 
         users = User.query.all()  # 🔥 Récupère tous les utilisateurs
         matches = Match.query.order_by(Match.date.desc()).all()  # 🔥 Récupère tous les matchs par date
+
+
         return render_template("admin_dashboard.html", users=users, matches=matches)
         
     

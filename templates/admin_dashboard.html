@@ -47,6 +47,7 @@
             <th>Mode</th>
             <th>Gagnants</th>
             <th>Joueurs</th>
+            <th>Statut</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -57,19 +58,20 @@
             <td>{{ match.date.strftime('%d/%m/%Y %H:%M') }}</td>
             <td>{{ match.mode }}</td>
             <td>
-                {% set players = [
+                {% set all_players = [
                     match.player1_id, match.player2_id,
                     match.player3_id, match.player4_id,
                     match.player5_id, match.player6_id
-                ] %}
-                {% set team1 = players[:players|length // 2] %}
-                {% set team2 = players[players|length // 2:] %}
-            
-                {% if match.draw %}
+                ] | select('!=', None) | list %}
+                {% set half = all_players|length // 2 %}
+                {% set team1 = all_players[:half] %}
+                {% set team2 = all_players[half:] %}
+                
+                {% if match.winning_team == "Nul" %}
                     <strong>Match nul</strong>
                 {% else %}
                     {% set winning_team = team1 if match.winning_team == "Team1" else team2 %}
-                    {% for player_id in winning_team if player_id %}
+                    {% for player_id in winning_team %}
                         {% set player = users | selectattr("id", "equalto", player_id) | first %}
                         {{ player.username if player else "Joueur supprimé" }}{% if not loop.last %}, {% endif %}
                     {% endfor %}
@@ -85,6 +87,13 @@
                     {% set player = users | selectattr("id", "equalto", player_id) | first %}
                     {{ player.username if player else "Joueur supprimé" }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
+            </td>
+            <td>
+                {% if match.confirmed %}
+                    <span class="badge bg-success">Confirmé</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">En attente</span>
+                {% endif %}
             </td>
             <td>
                 <form action="/delete_match/{{ match.id }}" method="POST" style="display:inline;">
