@@ -4,7 +4,7 @@
 <h2>Profil de {{ user.username }}</h2>
 
 <img src="{{ url_for('static', filename='profiles/' + (user.profile_picture or 'default.png')) }}" 
-     alt="Photo de profil" width="120" style="border-radius:50%; border:2px solid #ccc;">
+     alt="Photo de profil" width="120" style="border-radius:50%; border:2px solid #ccc; object-fit: cover; object-position: center;">
 
 <p>Étage : {{ user.floor }}</p>
 <p>Année : {{ user.year }}</p>

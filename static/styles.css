@@ -184,6 +184,14 @@ body {
 .diamond { border: 3px solid #4b0082; }
 .legend { border: 3px solid #ff4500; }
 
+.profile-pic {
+    width: 40px;              /* 🔥 taille fixe */
+    height: 40px;             /* 🔥 carré */
+    border-radius: 50%;       /* 🔥 cercle parfait */
+    object-fit: cover;        /* 🔥 crop en gardant le centre */
+    object-position: center;  /* 🔥 centre la photo */
+}
+
 @media (max-width: 768px) {
     h2 {
         font-size: 20px;
