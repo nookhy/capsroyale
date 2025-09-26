@@ -7,6 +7,14 @@ def expected_score(player_elo, opponent_elo):
     return 1 / (1 + 10 ** ((opponent_elo - player_elo) / 400))
 
 def update_elo(winner_elo, loser_elo, mode, draw):
+
+    if winner_elo < 800:
+        alpha_win = 2
+    else: alpha_win = 1
+    if loser_elo < 800:
+        alpha_lose = 0.5
+    else: alpha_lose = 1    
+
     alpha = 1
     if mode == 'Capacks':
         alpha = 3
@@ -20,15 +28,16 @@ def update_elo(winner_elo, loser_elo, mode, draw):
         alpha = 1.3
     if mode == 'CoinCoin':
         alpha = 3
+    
 
     
     expected_win = expected_score(winner_elo, loser_elo)
     if not draw:
-        new_winner_elo = round(winner_elo + alpha*K * (1 - expected_win))
-        new_loser_elo = round(loser_elo + alpha*K * (0 - (1 - expected_win)))
+        new_winner_elo = round(winner_elo + alpha_win*alpha*K * (1 - expected_win))
+        new_loser_elo = round(loser_elo + alpha_lose*alpha*K * (0 - (1 - expected_win)))
     else: 
-        new_winner_elo = round(winner_elo + alpha*K * (0.5 - expected_win))
-        new_loser_elo = round(loser_elo + alpha*K * (0.5 - (1 - expected_win)))
+        new_winner_elo = round(winner_elo + alpha_win*alpha*K * (0.5 - expected_win))
+        new_loser_elo = round(loser_elo + alpha_lose*alpha*K * (0.5 - (1 - expected_win)))
     return new_winner_elo, new_loser_elo
 
 def get_tier(elo):
